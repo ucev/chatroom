@@ -1,0 +1,61 @@
+.ongoing-dialog-item {
+  position: relative;
+  width: 100%;
+  height: 100px;
+  padding: 0;
+  margin: 0;
+  list-style-type: none;
+  background-color: red;
+  overflow: hidden;
+}
+
+.ongoing-dialog-item > * {
+  display: inline-block;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+.ongoing-dialog-item > .avatar {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  width: 80px;
+  height: 80px;
+}
+
+.ongoing-dialog-nickname {
+  position: absolute;
+  top: 0;
+  left: 100px;
+  width: calc((100% - 100px) * 0.8);
+  height: 50px;
+  padding-left: 10px;
+  text-align: left;
+  line-height: 50px;
+  background-color: brown;
+}
+
+.ongoing-dialog-datetime {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: calc((100% - 100px) * 0.2);
+  height: 50px;
+  padding-right: 10px;
+  text-align: right;
+  line-height: 50px;
+  background-color: green;
+}
+
+.ongoing-dialog-conversation {
+  position: absolute;
+  bottom: 0;
+  left: 100px;
+  width: calc(100% - 100px);
+  height: 50px;
+  padding-left: 10px;
+  text-align: left;
+  line-height: 50px;
+  background-color: yellow;
+}

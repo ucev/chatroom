@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import '../css/PageBarItem.css';
 
+import MyAction from '../../state/action';
+
 class PageBarItem extends Component {
   constructor(props) {
     super(props);
@@ -8,7 +10,7 @@ class PageBarItem extends Component {
   }
   onclick() {
     var page = this.props.page;
-    console.log(page);
+    MyAction.pageChange(page);
   }
   render() {
     return (

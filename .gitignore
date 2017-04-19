@@ -19,6 +19,9 @@ yarn-error.log*
 # MAC
 .DS_Store
 
+# configs
+/src/configs/database.yaml
+
 # Logs
 logs
 *.log

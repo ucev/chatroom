@@ -1,7 +1,67 @@
-.login-label {
+.login-form {
+  width: 80%;
+  max-width: 400px;
+  margin: 20px auto;
+}
 
+.form-input-line:first-of-type {
+  border-top: 1px solid #9E9E9E;
+}
+
+.form-input-line,
+.form-button-line {
+  display: flex;
+  align-items: center;
+  width: 80%;
+  height: 40px;
+  margin: 0 auto;
+}
+
+.form-input-line {
+  border: 1px solid #9E9E9E;
+  border-top: none;
+}
+
+.form-button-line {
+  justify-content: space-between;
+}
+
+.login-label {
+  height: 40px;
+  line-height: 40px;
+  color: #9E9E9E;
 }
 
 .login-input {
-  
+  border: none;
+}
+
+.login-label {
+  display: inline-block;
+  width: 100px;
+}
+
+.login-input {
+  display: inline-block;
+  flex-grow: 1;
+}
+
+.form-button-line button {
+  cursor: pointer;
+}
+
+.login-change-state-button {
+  outline: none;
+  border: none;
+  background: none;
+}
+
+.login-confirm-button {
+  height: 30px;
+  width: 80px;
+  color: white;
+  background-color: #44B549;
+  border-radius: 5px;
+  outline: none;
+  border: none;
 }

@@ -1,0 +1,22 @@
+host: localhost
+user: root
+pass: root
+dbname: chatroom
+tables:
+  - users:
+    - id:
+        type: int
+        key: "primary key"
+        auto_increment: true
+    - name:
+        type: char(20)
+        key: unique
+        null: false
+    - password:
+        type: char(32)
+        null: false
+    - addtime:
+        type: int
+        null: false
+    - cookie:
+        type: char(32)

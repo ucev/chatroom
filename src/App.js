@@ -13,12 +13,11 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = MyAction.getState();
-    console.log("STATE: " + JSON.stringify(this.state));
     this.__update = this.__update.bind(this);
   }
   componentDidMount() {
     MyAction.subscribe(this.__update);
-    //MyAction.pageCheck();
+    MyAction.pageCheck();
   }
   componentWillUnmount() {
     MyAction.unsubscribe();
@@ -47,7 +46,7 @@ class App extends Component {
             <Contacts />
           </div>
           <div key="login" className="app-page app-page-login" style={{display: currpage==="login" ? "block": "none"}}>
-            <Login />
+            <Login tag={this.state.loginState} />
           </div>
         </div>
         <div className="App-foot">

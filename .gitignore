@@ -21,6 +21,7 @@ yarn-error.log*
 
 # configs
 /src/configs/database.yaml
+/src/configs/config.js
 
 # Logs
 logs

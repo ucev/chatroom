@@ -26,7 +26,8 @@ class App extends Component {
     this.setState(MyAction.getState());
   }
   render() {
-    var dialogs = [{avatar: logo, nickname: '张帅', datetime: '周一', conversation: 'hello'}];
+    //var dialogs = [{avatar: logo, nickname: '张帅', datetime: '周一', conversation: 'hello'}];
+    var dialogs = [{avatar: '/logo.svg', nickname: '张帅', datetime: '周一', conversation: 'hello'}];
     var pageItems = [
       {icon: '/images/ic_chat_bubble_outline_black_36dp_1x.png', label: '聊天', page: 'chat'},
       {icon: '/images/ic_person_outline_black_36dp_1x.png', label: '联系人', page: 'contact'},

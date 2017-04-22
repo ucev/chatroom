@@ -33,10 +33,11 @@ const action = {
   pageChange: (page) => {
     return store.dispatch({ type: "PAGE_CHANGE", page: page });
   },
-  pageCheck: () => {
+  pageCheck: function() {
     var user = cookie.get("user");
+    var that = this;
     if (!user) {
-      this.pageChange("login");
+      that.pageChange("login");
     }
   },
   register: function(username, password) {

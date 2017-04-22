@@ -2,7 +2,6 @@
   "name": "chatroom",
   "version": "0.1.0",
   "private": true,
-  "proxy": "http://localhost:3001/",
   "dependencies": {
     "body-parser": "^1.17.1",
     "concurrently": "^3.4.0",
@@ -13,21 +12,28 @@
     "moment": "^2.18.1",
     "multiparty": "^4.1.3",
     "mysql": "^2.13.0",
-    "mysql-creator": "^0.1.2",
-    "react": "^15.5.4",
-    "react-dom": "^15.5.4",
-    "redux": "^3.6.0",
     "socket.io": "^1.7.3"
   },
   "devDependencies": {
-    "react-scripts": "0.9.5"
+    "babel-core": "^6.24.1",
+    "babel-loader": "^7.0.0",
+    "babel-preset-es2015": "^6.24.1",
+    "babel-preset-react": "^6.24.1",
+    "css-loader": "^0.28.0",
+    "extract-text-webpack-plugin": "^2.1.0",
+    "fs": "0.0.1-security",
+    "mysql-creator": "^0.1.2",
+    "react": "^15.4.2",
+    "react-dom": "^15.4.2",
+    "react-hot-loader": "^3.0.0-beta.6",
+    "redux": "^3.6.0",
+    "style-loader": "^0.16.1",
+    "svg-loader": "0.0.2",
+    "webpack": "^2.4.1",
+    "webpack-dev-server": "^2.4.3"
   },
   "scripts": {
-    "start": "concurrently \"npm run server\" \"npm run client\"",
-    "server": "node server.js",
-    "client": "node client.js",
-    "build": "react-scripts build",
-    "test": "react-scripts test --env=jsdom",
-    "eject": "react-scripts eject"
+    "js": "./node_modules/.bin/webpack webpack.config.js",
+    "start": "webpack-dev-server"
   }
 }

@@ -32,7 +32,7 @@ class Login extends Component {
     var changeTag = this.props.tag === 'login' ? 'register' : 'login';
     return (
       <form className='login-form'>
-        <legend>{tags[this.props.tag]}</legend>
+        <legend className='login-form-title'>{tags[this.props.tag]}</legend>
         <p className="login-form-line form-input-line">
           <label className="form-label login-label">用户名</label>
           <input ref={(input) => {this.usernameInput=input;}} className="form-input login-input" type="text" />

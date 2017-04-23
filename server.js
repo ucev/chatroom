@@ -1,48 +1,32 @@
-const express = require('express');
 const cookieParser = require('cookie-parser');
 const cookieSession = require('cookie-session');
 const bodyParser = require('body-parser');
 const path = require('path');
 
-
-const app = express();
+const configs = require('./configs/config');
+// router
 const login = require('./router/login');
+const test = require('./router/test');
+const port = require('./configs/config').websiteconfig.port;
 
-app.set('port', (process.env.PORT || 3001));
+var server = undefined;
 
 // Express only serves static assets in production
-if (process.env.NODE_ENV === 'production') {
-  app.use(express.static('client/build'));
+if (configs.websiteconfig.mode == 'prod') {
+  server = require('./server/server.prod');
+} else {
+  server = require('./server/server.dev');
 }
 
-app.use(express.static(path.join(__dirname, 'dist')));
-app.use(express.static(path.join(__dirname, 'public')));
+server.use(bodyParser.json());
+server.use(bodyParser.urlencoded({ extended: false }));
+server.use(cookieParser());
 
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(cookieParser());
+server.use('/login', login);
+server.use('/test', test);
 
-app.use('/login', login);
-app.get('/test', (req, res) => {
-  res.json({a: 1, b: 2});
-});
-app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, "public/index.html"));
+server.listen(port, "localhost", function() {
+  console.log(`Starting server on http://localhost:${port}`);
 })
 
-/*
-const server = require('http').createServer(app);
-const io = require('socket.io')();
-io.on("connection", function(socket) {
-  socket.on("chat", function(msg) {
-    //socket.broadcast("chat out", "hello, " + Date.now());
-    socket.emit("chat out", "hello, " + Date.now());
-  })
-});*/
-
-
-app.listen(app.get('port'), () => {
-  console.log(`Find the server at: http://localhost:${app.get('port')}/`); // eslint-disable-line no-console
-});
-
-module.exports = app;
+module.exports = server;

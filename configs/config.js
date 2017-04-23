@@ -5,4 +5,10 @@ const dbconfig = {
   database: 'chatroom'
 };
 
+const websiteconfig = {
+  port: 3003,
+  mode: 'prod'
+}
+
 exports.dbconfig = dbconfig;
+exports.websiteconfig = websiteconfig;

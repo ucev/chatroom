@@ -7,7 +7,7 @@ const dbconfig = {
 
 const websiteconfig = {
   port: 3003,
-  mode: 'prod'
+  mode: 'dev'
 }
 
 exports.dbconfig = dbconfig;

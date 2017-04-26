@@ -8,8 +8,6 @@ const basepath = path.resolve(__dirname, "..");
 
 const server = express();
 
-server.set('port', (process.env.PORT || 3003));
-
 server.use(express.static(path.join(basepath, 'dist')));
 server.use(express.static(path.join(basepath, 'public')));
 

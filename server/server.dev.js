@@ -11,13 +11,13 @@ const server = new webpackDevServer(compiler, {
   contentBase: path.join(basepath, "public"),
   stats: {
     colors: true
-  },
+  }/*,
 	setup: function(app) {
 		app.use(function(req, res, next) {
 			console.log(`Using middleware for ${req.url}`);
 			next();
 		});
-	}
+	}*/
 })
 
 module.exports = server;

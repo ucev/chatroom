@@ -9,7 +9,7 @@ module.exports = function (env) {
     entry: [
       'react-hot-loader/patch',
       `webpack-dev-server/client?http://localhost:${port}`,
-      path.resolve(__dirname, '../src/index.js')
+      path.resolve(__dirname, '../src/index.dev.js')
     ],
     output: {
       filename: 'bundle.js',

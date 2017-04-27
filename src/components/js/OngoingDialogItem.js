@@ -10,8 +10,7 @@ class OngoingDialogItem extends Component {
     this.startChat = this.startChat.bind(this);
   }
   startChat() {
-    console.log("start chat");
-    MyAction.curPageChange("chat");
+    MyAction.startChat(this.props.toid);
   }
   render() {
     return (

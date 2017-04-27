@@ -3,26 +3,47 @@ import React, { Component } from 'react';
 import SentenceItem from './components/js/SentenceItem';
 import SentenceInput from './components/js/SentenceInput';
 
+import MyAction from './state/action';
+
 import './ChatPage.css';
 
 class ChatPage extends Component {
+
+  componentDidUpdate() {
+    document.body.scrollTop = document.body.scrollHeight;
+  }
+
+  componentDidMount() {
+    document.body.scrollTop = document.body.scrollHeight;
+  }
+
+  back() {
+    MyAction.curPageChange("front");
+  }
+
+  getUserName(users, id) {
+    for (var user of users) {
+      if (user.id == id) {
+        return user.name;
+      }
+    }
+    return "";
+  }
+
   render() {
-    var ownerid=1;
-    var chatItem = [
-      { fromid: 1, nickname: "张三", sentence: "ABCD"},
-      { fromid: 2, nickname: "李四", sentence: "If a certain client is not ready to receive messages (because of network slowness or other issues, or because they’re connected through long polling and is in the middle of a request-response cycle), if it doesn’t receive ALL the tweets related to bieber your application won’t suffer." },
-      { fromid: 1, nickname: "张三", sentence: "EFGHIJKLMN"}
-    ];
-    var sentences = chatItem.map((chat) => {
-      return <SentenceItem nickname={chat.nickname} ownerid={ownerid} fromid={chat.fromid} nickname={chat.nickname} sentence={chat.sentence} />
+    var userid = this.props.userid;
+    var chatItem = this.props.conversations;
+    var sentences = chatItem.map((chat, index) => {
+      var nickname = this.getUserName(this.props.users, chat.from);
+      return <SentenceItem key={index} nickname={"ab"} ownerid={userid} fromid={chat.from} nickname={nickname} sentence={chat.sentence} />
     });
     return (
       <div className="App">
         <div className="App-header">
+          <img className="back-arrow" src="/images/ic_arrow_back_white_36dp_2x.png" onClick={this.back} />
           <h2>Chatroom DEMO</h2>
         </div>
         <div className="App-body">
-          <h1>聊天页面1</h1>
           <div className="sentences-div">{sentences}</div>
         </div>
         <div className="App-foot">

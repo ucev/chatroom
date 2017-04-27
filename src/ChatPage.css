@@ -1,3 +1,13 @@
+.back-arrow {
+  position: absolute;
+  left: 10px;
+  height: 30px;
+  width: 30px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+}
+
 .sentences-div {
   padding-bottom: 100px;
   background-color: white;

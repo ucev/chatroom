@@ -26,11 +26,11 @@ class App extends Component {
   render() {
     if (this.state.curpage == 'front') {
       return (
-        <FrontPage key="front" state={this.state}/>
+        <FrontPage state={this.state}/>
       )
     } else {
       return (
-        <ChatPage />
+        <ChatPage toid={this.state.toid} userid={this.state.userid} users={this.state.users} conversations={this.state.conversations}/>
       )
     }
   }

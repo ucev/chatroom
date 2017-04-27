@@ -42,8 +42,9 @@ app.get('/', (req, res) => {
  * !!!
  */
 if (configs.websiteconfig.mode == 'prod') {
-  http
+  httpServer.listen(port);
+} else {
+  server.listen(3003);
 }
-server.listen(3003);
 
 module.exports = app;

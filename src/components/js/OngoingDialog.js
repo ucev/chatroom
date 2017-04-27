@@ -2,10 +2,33 @@ import React, { Component } from 'react';
 import OngoingDialogItem from './OngoingDialogItem';
 import '../css/OngoingDialog.css';
 
+import moment from 'moment';
+
 class OngoingDialog extends Component {
+  getUserInfo(users, id) {
+    for (var user of users) {
+      if (user.id == id) {
+        return user;
+      }
+    }
+    return {};
+  }
+  getChatTime(tm) {
+    var now = moment();
+    var last = moment(tm);
+    if (now.year() == last.year() && now.month() == last.month() && now.dayOfYear() == last.dayOfYear()) {
+      return last.format("HH:mm");
+    } else {
+      return last.format("M-D");
+    }
+  }
   render() {
+    var users = this.props.users;
     var dialogs = this.props.dialogs.map((dialog) => {
-      return <OngoingDialogItem key={dialog.nickname} avatar={dialog.avatar} nickname={dialog.nickname} datetime={dialog.datetime} conversation={dialog.conversation} />
+      var toid = Number(dialog.id);
+      var userinfo = this.getUserInfo(users, toid);
+      var lastDialog = dialog.dialog;
+      return <OngoingDialogItem key={toid} toid={toid} avatar={"/logo.svg"} nickname={userinfo.name} datetime={this.getChatTime(lastDialog.datetime)} conversation={lastDialog.sentence} />
     })
     return (
       <ul className="ongoing-dialog">

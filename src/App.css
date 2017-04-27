@@ -6,9 +6,11 @@
   height: 100%;
   margin: auto;
   background-color: white;
+  border: 1px solid #BDBDBD;
 }
 
 .App-header {
+  position: relative;
   background-color: #222;
   padding: 10px;
   color: white;
@@ -24,7 +26,6 @@
   bottom: 0;
   width: 100%;
   max-width: 500px;
-  background-color: black;
 }
 
 .app-page {

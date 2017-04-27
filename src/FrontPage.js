@@ -16,7 +16,7 @@ class App extends Component {
   render() {
     var state = this.props.state;
     //var dialogs = [{avatar: logo, nickname: '张帅', datetime: '周一', conversation: 'hello'}];
-    var dialogs = [{avatar: '/logo.svg', nickname: '张帅', datetime: '周一', conversation: 'hello'}];
+    //var dialogs = [{avatar: '/logo.svg', nickname: '张帅', datetime: '周一', conversation: 'hello'}];
     var pageItems = [
       {icon: '/images/ic_chat_bubble_outline_black_36dp_1x.png', label: '聊天', page: 'chat'},
       {icon: '/images/ic_person_outline_black_36dp_1x.png', label: '联系人', page: 'contact'},
@@ -30,10 +30,10 @@ class App extends Component {
         </div>
         <div className="App-body">
           <div key="chat" className="app-page app-page-chat" style={{display: currpage==="chat" ? "block": "none"}}>
-            <OngoingDialog dialogs={dialogs} />
+            <OngoingDialog users={state.users} dialogs={state.ongoingDialog} />
           </div>
           <div key="contact" className="app-page app-page-contact" style={{display: currpage==="contact" ? "block": "none"}}>
-            <Contacts />
+            <Contacts userid={state.userid} users={state.users}/>
           </div>
           <div key="login" className="app-page app-page-login" style={{display: currpage==="login" ? "block": "none"}}>
             <Login tag={state.loginState} />

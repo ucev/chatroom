@@ -3,6 +3,7 @@
   height: 50px;
   padding: 5px;
   list-style-type: none;
+  cursor: pointer;
 }
 
 .page-bar-item img {

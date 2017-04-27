@@ -33,18 +33,37 @@ class Users {
     var conn = mysql.createConnection(dbconfig);
     return new Promise((resolve, reject) => {
       conn.query(`select * from ${this._tbname} where name = ?`, [username], (err, results, fields) => {
-        if (err || results.length == 0) {
+        if (err || !results || results.length == 0) {
           conn.end(() => {});
           reject();
         }
+        /**
+         * results ?
+         */
         var userinfo = results[0];
-        if (userinfo.password === md5(password)) {
+        if (userinfo && userinfo.password === md5(password)) {
           conn.end(() => {});
-          resolve(userinfo.id);
+          var data = {id: userinfo.id, nickname: userinfo.name};
+          resolve(data);
         } else {
           conn.end(() => {});
           reject();
         }
+      })
+    })
+  }
+
+  getFriends(id) {
+    var conn = mysql.createConnection(dbconfig);
+    return new Promise((resolve, reject) => {
+      conn.query(`select * from ${this._tbname} order by id`, (err, results, fields) => {
+        if (err || !results) {
+          reject();
+        }
+        var users = results.map((r) => {
+          return {id: r.id, name: r.name};
+        });
+        resolve(users);
       })
     })
   }

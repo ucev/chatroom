@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import UserItem from './UserItem';
 
+import MyAction from '../../state/action';
+
 class Contacts extends Component {
   render() {
     var userid = this.props.userid;
@@ -9,7 +11,7 @@ class Contacts extends Component {
     });
     var users = users.map((user) => {
       return (
-        <UserItem key={user.id} id={user.id} avatar='/logo.svg' nickname={user.name} />
+        <UserItem key={user.id} id={user.id} avatar={MyAction.getAvatarPath(user.avatar)} nickname={user.name} />
       )
     })
     return (

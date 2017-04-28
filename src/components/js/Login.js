@@ -11,7 +11,7 @@ class Login extends Component {
   }
   changeState(e) {
     var newState = this.props.tag === 'login' ? 'register' : 'login';
-    MyAction.changeLoginState(newState);
+    MyAction.loginStateChange(newState);
     e.preventDefault();
   }
   confirm(e) {

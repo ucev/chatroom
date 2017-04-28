@@ -9,3 +9,6 @@ Migrate to pure `express`, and try to use `webpack` myself.
 
 ## Update On 2017/4/27
 Chatroom demo with limited functions. To get it to work as expected will need more works, but it fulfills my initial purpose to try to use `socket.io`.Continuing.
+
+## Update on 2017/4/28
+Add online/offline state tommorrow, together with some small modifications.

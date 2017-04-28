@@ -8,7 +8,10 @@ import MyAction from './state/action';
 import './ChatPage.css';
 
 class ChatPage extends Component {
-
+  constructor(props) {
+    super(props);
+    this.getUserInfo = this.getUserInfo.bind(this);
+  }
   componentDidUpdate() {
     document.body.scrollTop = document.body.scrollHeight;
   }
@@ -21,25 +24,30 @@ class ChatPage extends Component {
     MyAction.curPageChange("front");
   }
 
-  getUserName(users, id) {
+  getUserInfo(id) {
+    var users = this.props.users;
     for (var user of users) {
       if (user.id == id) {
-        return user.name;
+        return user;
       }
     }
-    return "";
+    return {};
   }
 
   render() {
     var userid = this.props.userid;
     var chatItem = this.props.conversations;
     var sentences = chatItem.map((chat, index) => {
-      var nickname = this.getUserName(this.props.users, chat.from);
-      return <SentenceItem key={index} nickname={"ab"} ownerid={userid} fromid={chat.from} nickname={nickname} sentence={chat.sentence} />
+      var userinfo = this.getUserInfo(chat.from);
+      return <SentenceItem key={index} ownerid={userid} fromid={chat.from} nickname={userinfo.name} avatar={MyAction.getAvatarPath(userinfo.avatar)} content={chat.content} />
     });
+    var newinfo = this.props.newinfo;
     return (
       <div className="App">
         <div className="App-header">
+          {newinfo.from > 0 &&
+            <div className="new-chat-notification">{this.getUserInfo(newinfo.from).name}: {newinfo.info}</div>
+          }
           <img className="back-arrow" src="/images/ic_arrow_back_white_36dp_2x.png" onClick={this.back} />
           <h2>Chatroom DEMO</h2>
         </div>

@@ -8,10 +8,10 @@ class SentenceItem extends Component {
     var itemName = `sentence-item sentence-item-${direct}`;
     return (
       <div className={itemName}>
-        <div className="sentence-item-avatar"></div>
+        <img className="sentence-item-avatar" src={this.props.avatar} />
         <div className="sentence-item-detail">
           <div className="sentence-item-nickname">{this.props.nickname}</div>
-          <div className="sentence-item-content">{this.props.sentence}</div>
+          <div className="sentence-item-content">{this.props.content}</div>
         </div>
       </div>
     )

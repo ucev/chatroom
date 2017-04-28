@@ -14,11 +14,14 @@ class OngoingDialogItem extends Component {
   }
   render() {
     return (
-      <li className="ongoing-dialog-item" onClick = {this.startChat}>
+      <li className="ongoing-dialog-item" onClick={this.startChat}>
         <Avatar imgsrc={this.props.avatar} />
         <span className="ongoing-dialog-nickname">{this.props.nickname}</span>
         <span className="ongoing-dialog-datetime">{this.props.datetime}</span>
-        <span className="ongoing-dialog-conversation">{this.props.conversation}</span>
+        <span className="ongoing-dialog-content">{this.props.content}</span>
+        {this.props.unread > 0 &&
+          <span className="ongoing-dialog-unread">{this.props.unread}</span>
+        }
       </li>
     );
   }

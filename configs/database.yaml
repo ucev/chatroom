@@ -15,8 +15,34 @@ tables:
     - password:
         type: char(32)
         null: false
+    - avatar:
+        type: varchar(100)
+        default: "logo.svg"
     - addtime:
         type: int
         null: false
     - cookie:
         type: char(32)
+    - online:
+        type: tinyint
+        default: 0
+  - chat:
+    - id:
+        type: int
+        key: "primary key"
+        auto_increment: true
+    - from:
+        type: int
+        null: false
+    - to:
+        type: int
+        null: false
+    - content:
+        type: varchar(500)
+        null: false
+    - datetime:
+        type: int
+        null: false
+    - readed:
+        type: tinyint
+        default: 0

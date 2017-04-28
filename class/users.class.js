@@ -1,5 +1,7 @@
 const mysql = require('mysql');
 const md5 = require('../utils/md5');
+const fs = require('fs');
+const path = require('path');
 const dbconfig = require('../configs/config').dbconfig;
 
 class Users {
@@ -43,12 +45,24 @@ class Users {
         var userinfo = results[0];
         if (userinfo && userinfo.password === md5(password)) {
           conn.end(() => {});
-          var data = {id: userinfo.id, nickname: userinfo.name};
+          var data = {id: userinfo.id, nickname: userinfo.name, avatar: userinfo.avatar};
           resolve(data);
         } else {
           conn.end(() => {});
           reject();
         }
+      })
+    })
+  }
+
+  get(id) {
+    var conn = mysql.createConnection(dbconfig);
+    return new Promise((resolve, reject) => {
+      conn.query(`select * from ${this._tbname} where id = ?`, [id], (err, results, fields) => {
+        if (err) {
+          reject();
+        }
+        resolve(results[0]);
       })
     })
   }
@@ -61,9 +75,36 @@ class Users {
           reject();
         }
         var users = results.map((r) => {
-          return {id: r.id, name: r.name};
+          return {id: r.id, name: r.name, avatar: r.avatar};
         });
         resolve(users);
+      })
+    })
+  }
+
+  updateAvatar(userid, tempfile) {
+    var conn;
+    var fileext = path.extname(tempfile);
+    var newname = md5(`${userid}:${Date.now()}`);
+    newname = newname + fileext;
+    var newpath = path.join(__dirname, '../public/images/avatar', newname);
+    return new Promise((resolve, reject) => {
+      fs.rename(tempfile, newpath, (err) => {
+        if (err) {
+          reject();
+        }
+        resolve();
+      })
+    }).then(() => {
+      conn = mysql.createConnection(dbconfig);
+      return new Promise((resolve, reject) => {
+        conn.query(`update ${this._tbname} set ? where id = ?`, [{avatar: newname}, userid], (err, results, fields) => {
+          conn.end(() => {});
+          if (err) {
+            reject();
+          }
+          resolve();
+        })
       })
     })
   }

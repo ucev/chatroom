@@ -36,6 +36,7 @@
   },
   "scripts": {
     "build": "webpack --env=prod --progress --profile --colors",
-    "start": "node server.js"
+    "start": "node server.js",
+    "create-db": "mysql-creator ./configs/database.yaml"
   }
 }

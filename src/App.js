@@ -30,7 +30,7 @@ class App extends Component {
       )
     } else {
       return (
-        <ChatPage toid={this.state.toid} userid={this.state.userid} users={this.state.users} conversations={this.state.conversations}/>
+        <ChatPage toid={this.state.toid} userid={this.state.userid} users={this.state.users} conversations={this.state.conversations} newinfo={this.state.newinfo}/>
       )
     }
   }

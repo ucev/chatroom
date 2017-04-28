@@ -11,7 +11,6 @@
   width: 50px;
   height: 50px;
   border-radius: 50%;
-  background-color: green;
 }
 
 .sentence-item .sentence-item-detail {
@@ -27,13 +26,13 @@
 
 .sentence-item .sentence-item-content {
   max-width: 80%;
-  background-color: red;
   border-radius: 10px;
+  border: 1px solid #BDBDBD;
   padding: 10px 20px;
   text-align: left;
 }
 
-.sentence.item-left {
+.sentence-item-left {
   justify-content: flex-start;
 }
 
@@ -51,7 +50,20 @@
 }
 
 .sentence-item-left .sentence-item-content {
+  position: relative;
+  background-color: #FFFFFF;
 }
+/*
+.sentence-item-left .sentence-item-content:before {
+  position: absolute;
+  left: -10px;
+  content: "";
+  width: 0px;
+  height: 0px;
+  border-right: 10px solid #BDBDBD;
+  border-top: 10px solid transparent;
+  border-bottom: 10px solid transparent;
+}*/
 
 .sentence-item-right {
   justify-content: flex-end;
@@ -71,4 +83,5 @@
 }
 
 .sentence-item-right .sentence-item-content {
+  background-color: #7BF157;
 }

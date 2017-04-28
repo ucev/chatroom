@@ -54,7 +54,7 @@
   line-height: 20px;
 }
 
-.ongoing-dialog-conversation {
+.ongoing-dialog-content {
   position: absolute;
   bottom: 10px;
   left: 60px;
@@ -65,4 +65,15 @@
   color: #616161;
   text-align: left;
   line-height: 20px;
+}
+.ongoing-dialog-unread {
+  position: absolute;
+  left: 50px;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  color: white;
+  line-height: 20px;
+  text-align: center;
+  background-color: red;
 }

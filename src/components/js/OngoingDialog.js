@@ -4,6 +4,8 @@ import '../css/OngoingDialog.css';
 
 import moment from 'moment';
 
+import MyAction from '../../state/action';
+
 class OngoingDialog extends Component {
   getUserInfo(users, id) {
     for (var user of users) {
@@ -28,7 +30,7 @@ class OngoingDialog extends Component {
       var toid = Number(dialog.id);
       var userinfo = this.getUserInfo(users, toid);
       var lastDialog = dialog.dialog;
-      return <OngoingDialogItem key={toid} toid={toid} avatar={"/logo.svg"} nickname={userinfo.name} datetime={this.getChatTime(lastDialog.datetime)} conversation={lastDialog.sentence} />
+      return <OngoingDialogItem key={toid} toid={toid} avatar={MyAction.getAvatarPath(userinfo.avatar)} nickname={userinfo.name} datetime={this.getChatTime(lastDialog.datetime)} content={lastDialog.content} unread={dialog.unread} />
     })
     return (
       <ul className="ongoing-dialog">

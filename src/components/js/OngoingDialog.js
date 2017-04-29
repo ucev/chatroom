@@ -30,7 +30,7 @@ class OngoingDialog extends Component {
       var toid = Number(dialog.id);
       var userinfo = this.getUserInfo(users, toid);
       var lastDialog = dialog.dialog;
-      return <OngoingDialogItem key={toid} toid={toid} avatar={MyAction.getAvatarPath(userinfo.avatar)} nickname={userinfo.name} datetime={this.getChatTime(lastDialog.datetime)} content={lastDialog.content} unread={dialog.unread} />
+      return <OngoingDialogItem key={toid} toid={toid} user={userinfo} datetime={this.getChatTime(lastDialog.datetime)} content={lastDialog.content} unread={dialog.unread} />
     })
     return (
       <ul className="ongoing-dialog">

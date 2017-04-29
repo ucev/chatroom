@@ -11,7 +11,7 @@ class Contacts extends Component {
     });
     var users = users.map((user) => {
       return (
-        <UserItem key={user.id} id={user.id} avatar={MyAction.getAvatarPath(user.avatar)} nickname={user.name} />
+        <UserItem key={user.id} user={user} />
       )
     })
     return (

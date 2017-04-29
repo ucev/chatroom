@@ -11,6 +11,7 @@ class ChatPage extends Component {
   constructor(props) {
     super(props);
     this.getUserInfo = this.getUserInfo.bind(this);
+    this.chatTo = this.chatTo.bind(this);
   }
   componentDidUpdate() {
     document.body.scrollTop = document.body.scrollHeight;
@@ -34,6 +35,11 @@ class ChatPage extends Component {
     return {};
   }
 
+  chatTo() {
+    var newinfo = this.props.newinfo;
+    MyAction.startChat(newinfo.from);
+  }
+
   render() {
     var userid = this.props.userid;
     var chatItem = this.props.conversations;
@@ -46,7 +52,7 @@ class ChatPage extends Component {
       <div className="App">
         <div className="App-header">
           {newinfo.from > 0 &&
-            <div className="new-chat-notification">{this.getUserInfo(newinfo.from).name}: {newinfo.info}</div>
+            <div className="new-chat-notification" onClick={this.chatTo}>{this.getUserInfo(newinfo.from).name}: {newinfo.info}</div>
           }
           <img className="back-arrow" src="/images/ic_arrow_back_white_36dp_2x.png" onClick={this.back} />
           <h2>Chatroom DEMO</h2>

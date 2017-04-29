@@ -13,10 +13,11 @@ class UserItem extends Component {
     MyAction.startChat(this.props.id);
   }
   render() {
+    var user = this.props.user;
     return (
       <li className="user-item" onClick = {this.startChat}>
-        <Avatar imgsrc={this.props.avatar} />
-        <span className="user-item-nickname">{this.props.nickname}</span>
+        <Avatar imgsrc={MyAction.getAvatarPath(user.avatar)} />
+        <span className="user-item-nickname">{user.name}[{user.online==1?'在线':'下线'}]</span>
       </li>
     );
   }

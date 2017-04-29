@@ -4,7 +4,7 @@ const defaultState = {
   page: "chat",
   // front page or chat page
   curpage: 'front',
-  loginState: 'logged',
+  loginState: 'login',
   // users who you can chat with
   users: [],
   // user who you are chatting with
@@ -37,8 +37,11 @@ const reducer = (state = defaultState, action) => {
       conversations.push(action.data);
       return Object.assign({}, state, {conversations: conversations, ongoingDialog: action.ongoingDialog});
     case "SET_USER_INFO":
-      var userinfo = {userid: action.userid, nickname: action.nickname, avatar: action.avatar};
-      return Object.assign({}, state, userinfo);
+      var newState = {userid: action.userid, nickname: action.nickname, avatar: action.avatar};
+      if (newState.userid > 0) {
+        newState.loginState = "logged";
+      }
+      return Object.assign({}, state, newState);
     case "USER_LOGIN":
       break;
     case "USER_REGISTER":

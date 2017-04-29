@@ -75,7 +75,7 @@ class Users {
           reject();
         }
         var users = results.map((r) => {
-          return {id: r.id, name: r.name, avatar: r.avatar};
+          return {id: r.id, name: r.name, avatar: r.avatar, online: r.online};
         });
         resolve(users);
       })
@@ -105,6 +105,19 @@ class Users {
           }
           resolve();
         })
+      })
+    })
+  }
+
+  updateOnlineState(userid, online) {
+    console.log(`update online state: ${userid}  ${online}`);
+    var conn = mysql.createConnection(dbconfig);
+    return new Promise((resolve, reject) => {
+      conn.query(`update ${this._tbname} set online = ? where id = ?`, [online, userid], (err, results,fields) => {
+        if (err) {
+          reject();
+        }
+        resolve();
       })
     })
   }

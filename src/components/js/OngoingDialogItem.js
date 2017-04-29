@@ -13,10 +13,11 @@ class OngoingDialogItem extends Component {
     MyAction.startChat(this.props.toid);
   }
   render() {
+    var user = this.props.user;
     return (
       <li className="ongoing-dialog-item" onClick={this.startChat}>
-        <Avatar imgsrc={this.props.avatar} />
-        <span className="ongoing-dialog-nickname">{this.props.nickname}</span>
+        <Avatar imgsrc={MyAction.getAvatarPath(user.avatar)} />
+        <span className="ongoing-dialog-nickname">{user.name}</span>
         <span className="ongoing-dialog-datetime">{this.props.datetime}</span>
         <span className="ongoing-dialog-content">{this.props.content}</span>
         {this.props.unread > 0 &&

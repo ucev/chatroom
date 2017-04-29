@@ -84,6 +84,7 @@ const action = {
     cookie.remove("nickname");
     cookie.remove("avatar");
     this.loginStateChange("login");
+    this.socketDisconnect();
   },
   loginStateChange: function (state) {
     store.dispatch({ type: "LOGIN_STATE_CHANGE", state: state });
@@ -105,6 +106,9 @@ const action = {
     }
   },
   pageChange: function (page) {
+    if (!this.pageCheck(page)) {
+      return;
+    }
     var data = {};
     if (page == 'chat') {
       var ongoingDialog = this.storeChatList();
@@ -117,15 +121,19 @@ const action = {
     this.getUsers();
     return store.dispatch({ type: "PAGE_CHANGE", page: page, data: data });
   },
-  pageCheck: function () {
+  pageCheck: function (page) {
+    if (page == "login") return true;
     var userid = cookie.get("userid");
     var that = this;
     if (!userid) {
       that.pageChange("login");
+      return false;
     } else {
+      var state = this.getState();
       var nickname = cookie.get("nickname");
       var avatar = cookie.get("avatar");
       store.dispatch({ type: "SET_USER_INFO", userid: userid, nickname: nickname, avatar: avatar });
+      return true;
     }
   },
   register: function (username, password) {
@@ -194,6 +202,7 @@ const action = {
     var that = this;
     var userid = cookie.get("userid");
     return this.socketDisconnect().then(function () {
+      if (!userid) return;
       that.__socket = new io("http://localhost:3003");
       that.__socket.on("connect", function () {
         console.log("connected");
@@ -202,6 +211,10 @@ const action = {
         that.__socket.on("news", function (data) {
           that.sentenceReceived(data);
         });
+        that.__socket.on("users", function(data) {
+          console.log("update users");
+          that.getUsers();
+        })
       });
     }).catch((err) => {
       console.log(err);

@@ -12,3 +12,6 @@ Chatroom demo with limited functions. To get it to work as expected will need mo
 
 ## Update on 2017/4/28
 Add online/offline state tommorrow, together with some small modifications.
+
+## Update on 2017/4/28
+In this demo, I have learnt how to use **socket.io** and how to create **single page web application** with `React`. For it doesn't seem to have any meanings to continue, so just stop here. And I will find something else to learn.

@@ -8,9 +8,9 @@ class PageBarItem extends Component {
     super(props);
     this.onclick = this.onclick.bind(this);
   }
-  onclick() {
+  onclick() { 
     var page = this.props.page;
-    MyAction.pageChange(page);
+    MyAction.pageSetState("front_page", page);
   }
   render() {
     return (

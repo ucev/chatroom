@@ -16,6 +16,7 @@ class OngoingDialog extends Component {
     return {};
   }
   getChatTime(tm) {
+    if (!tm) {return ""};
     var now = moment();
     var last = moment(tm);
     if (now.year() == last.year() && now.month() == last.month() && now.dayOfYear() == last.dayOfYear()) {
@@ -30,6 +31,7 @@ class OngoingDialog extends Component {
       var toid = Number(dialog.id);
       var userinfo = this.getUserInfo(users, toid);
       var lastDialog = dialog.dialog;
+      if (!toid || !userinfo || !lastDialog) return;
       return <OngoingDialogItem key={toid} toid={toid} user={userinfo} datetime={this.getChatTime(lastDialog.datetime)} content={lastDialog.content} unread={dialog.unread} />
     })
     return (

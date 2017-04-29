@@ -2,8 +2,10 @@ import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
 
-import FrontPage from './FrontPage';
-import ChatPage from './ChatPage';
+import FrontPage from './pages/js/FrontPage';
+import ChatPage from './pages/js/ChatPage';
+import AvatarPage from './pages/js/AvatarPage';
+import NicknamePage from './pages/js/NicknamePage';
 
 import MyAction from './state/action';
 
@@ -15,7 +17,8 @@ class App extends Component {
   }
   componentDidMount() {
     MyAction.subscribe(this.__update);
-    MyAction.pageCheck();
+    // 初始化
+    MyAction.pageSetState("front_page", "ongoing_dialog");
   }
   componentWillUnmount() {
     MyAction.unsubscribe();
@@ -24,14 +27,24 @@ class App extends Component {
     this.setState(MyAction.getState());
   }
   render() {
-    if (this.state.curpage == 'front') {
-      return (
-        <FrontPage state={this.state}/>
-      )
-    } else {
-      return (
-        <ChatPage toid={this.state.toid} userid={this.state.userid} users={this.state.users} conversations={this.state.conversations} newinfo={this.state.newinfo}/>
-      )
+    var pageManager = this.state.pageState;
+    switch (pageManager.getPage()) {
+      case "chat_page":
+        return (
+          <ChatPage key="chat_page" toid={this.state.toid} userid={this.state.userid} users={this.state.users} conversations={this.state.conversations} newinfo={this.state.newinfo} />
+        );
+      case "avatar_page":
+        return (
+          <AvatarPage avatar={this.state.avatar} />
+        );
+      case "nickname_page":
+        return (
+          <NicknamePage nickname={this.state.nickname} />
+        );
+      default:
+        return (
+          <FrontPage key="front_page" state={this.state} />
+        )
     }
   }
 }

@@ -1,0 +1,32 @@
+.avatar-page {
+  display: flex;
+  flex-direction: column;
+}
+.avatar-header {
+  height: 50px;
+  flex-grow: 0;
+  flex-shrink: 0;
+}
+
+.avatar-body {
+  display: flex;
+  flex-grow: 1;
+  flex-direction: column;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.avatar-page-img {
+  display: block;
+  width: 100%;
+}
+
+.avatar-choose-photo {
+  position: absolute;
+  right: 10px;
+  height: 30px;
+  width: 30px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+}

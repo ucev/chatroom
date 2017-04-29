@@ -13,13 +13,12 @@ class Chat {
       conn.query(`insert into ${this._tbname} set ?`, [data], (err, results, fields) => {
         conn.end(() => { });
         if (err) {
-          console.log(err);
           reject();
         }
         var insertId = results.insertId;
         resolve(insertId);
       })
-    })
+    }).catch(() => { });
   }
 
   getUnreadedChat(id) {
@@ -32,19 +31,20 @@ class Chat {
         }
         resolve(results);
       })
-    });
+    }).catch(() => { });
   }
 
   updateUnreadedChat(infoid, toid) {
     var conn = mysql.createConnection(dbconfig);
     return new Promise((resolve, reject) => {
       conn.query(`update ${this._tbname} set readed = 1 where id = ? and ${conn.escapeId('to')} = ?`, [infoid, toid], (err, results, fields) => {
+        conn.end(() => { });
         if (err) {
           reject();
         }
         resolve();
       })
-    })
+    }).catch(() => { });
   }
 }
 

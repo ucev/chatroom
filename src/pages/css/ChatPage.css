@@ -1,3 +1,16 @@
+.chat-page-header {
+  box-sizing: border-box;
+  position: fixed;
+  z-index: 10;
+  width: 100%;
+  max-width: 500px;
+  margin: auto;
+}
+
+.chat-page-body {
+  padding-top: 100px;
+}
+
 .back-arrow {
   position: absolute;
   left: 10px;

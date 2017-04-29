@@ -56,10 +56,23 @@ router.post('/users/avatar', (req, res, next) => {
   })
 })
 
+router.post('/users/nickname', (req, res, next) => {
+  var form = new multiparty.Form();
+  form.parse(req, (err, fields, files) => {
+    var userid = fields.userid;
+    var nickname = fields.nickname;
+    _users.updateNickname(userid, nickname).then((data) => {
+      res.json(data);
+    }).catch((data) => {
+      res.json(data);
+    })
+  })
+})
+
 router.get('/users/userinfo', (req, res, next) => {
   var userid = req.query.userid;
   _users.get(userid).then((data) => {
-    var dt = {userid: data.userid, nickname: data.nickname, avatar: data.avatar};
+    var dt = {id: data.id, nickname: data.name, avatar: data.avatar};
     res.json({code: 0, msg: '获取成功', data: dt});
   }).catch(() => {
     res.json({code: 1, msg: '获取失败'});

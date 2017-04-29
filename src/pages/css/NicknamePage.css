@@ -1,0 +1,40 @@
+.nickname-header {
+  height: 50px;
+}
+
+.nickname-label {
+  position: absolute;
+  left: 50px;
+  top: 50%;
+  transform: translateY(-50%);
+  height: 30px;
+  line-height: 30px;
+}
+
+.nickname-save {
+  position: absolute;
+  right: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  height: 25px;
+  width: 60px;
+  background-color: green;
+  border: none;
+  outline: none;
+  color: white;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.nickname-input {
+    box-sizing: border-box;
+    display: block;
+    width: calc(100% - 20px);
+    height: 30px;
+    line-height: 30px;
+    margin-top: 10px;
+    margin-left: 10px;
+    border: none;
+    outline: none;
+    border-bottom: 1px solid green;
+}

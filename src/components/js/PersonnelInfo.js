@@ -9,8 +9,12 @@ class PersonnelInfo extends Component {
     this.chooseAvatar = this.chooseAvatar.bind(this);
     this.uploadAvatar = this.uploadAvatar.bind(this);
   }
+  changeNickname() {
+    MyAction.pageAdd("nickname_page");
+  }
   chooseAvatar() {
-    this.avatarInput.click();
+    //this.avatarInput.click();
+    MyAction.pageAdd("avatar_page");
   }
   logout() {
     MyAction.logout();
@@ -25,7 +29,7 @@ class PersonnelInfo extends Component {
           <label className="personnel-info-item-label">头像</label>
           <img className="personnel-info-item-content" src={MyAction.getAvatarPath(this.props.avatar)} />
         </div>
-        <div className="personnel-info-item-div">
+        <div className="personnel-info-item-div" onClick={this.changeNickname}>
           <label className="personnel-info-item-label">昵称</label>
           <span className="personnel-info-item-content">{this.props.nickname}</span>
         </div>

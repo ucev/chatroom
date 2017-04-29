@@ -6,17 +6,6 @@ const action = {
   __unsubscribe: undefined,
   __socket: undefined,
   __inited: false,
-  curPageChange: function (curpage, toid = undefined) {
-    if (curpage == 'chat') {
-      this.storeChatUnreadReset(toid);
-    }
-    var data = { toid: toid };
-    var ongoingDialog = this.storeChatList();
-    var conversations = this.storeChatGet(toid);
-    data.ongoingDialog = ongoingDialog;
-    data.conversations = conversations;
-    store.dispatch({ type: "CUR_PAGE_CHANGE", curpage: curpage, data: data });
-  },
   getAvatarPath: (avatar) => {
     return `/images/avatar/${avatar}`;
   },
@@ -49,7 +38,6 @@ const action = {
   getState: function () {
     if (!this.__inited) {
       this.__inited = true;
-      this.pageChange("chat");
       this.socketConnect();
     }
     return store.getState();
@@ -70,8 +58,7 @@ const action = {
             that.setUserInfo(userinfo);
             // init socketio
             this.socketConnect();
-            that.loginStateChange("logged");
-            that.pageChange("chat");
+            this.loginStateChange("info");
           } else {
             alert("登陆失败");
           }
@@ -87,7 +74,7 @@ const action = {
     this.socketDisconnect();
   },
   loginStateChange: function (state) {
-    store.dispatch({ type: "LOGIN_STATE_CHANGE", state: state });
+    this.pageSetState("user", state);
   },
   newInfoNotification: function (toid, data) {
     if (this.__clearNewInfoNotification) {
@@ -105,36 +92,85 @@ const action = {
       }, 2000);
     }
   },
-  pageChange: function (page) {
-    if (!this.pageCheck(page)) {
+  pageAdd: function (page, weight, extraData = {}) {
+    var state = this.getState();
+    var pageState = state.pageState;
+    pageState.push(page, weight);
+    this.__pageChange(pageState, extraData);
+  },
+  pageBack: function() {
+    var state = this.getState();
+    var pageState = state.pageState;
+    pageState.back();
+    this.__pageChange(pageState, {});
+  },
+  pagePush: function (page, extraData) {
+    this.pageAdd(page, undefined, extraData);
+  },
+  pageReplace: function (page, extraData = {}) {
+    var state = this.getState();
+    var pageState = state.pageState;
+    pageState.replace(page);
+    this.__pageChange(pageState, extraData);
+  },
+  pageSetState: function (page, st) {
+    var state = this.getState();
+    var pageState = state.pageState;
+    pageState.setState(page, st);
+    this.__pageChange(pageState, {});
+  },
+  __pageLogin: function() {
+    var state = this.getState();
+    var pageState = state.pageState;
+    pageState.push("front_page");
+    pageState.setState("front_page", "user");
+    pageState.setState("user", "login");
+    store.dispatch({type: "PAGE_STATE_CHANGE", data: {pageState: pageState}});
+  },
+  __pageChange: function (pageState, extraData={}) {
+    if (!this.pageCheck(pageState)) {
       return;
     }
-    var data = {};
-    if (page == 'chat') {
-      var ongoingDialog = this.storeChatList();
-      data.ongoingDialog = ongoingDialog;
-      //store.dispatch({ type: "ONGOING_DIALOG", ongoingDialog: ongoingDialog });
+    var data = extraData;
+    data.pageState = pageState;
+    switch (pageState.getPage()) {
+      case "front_page":
+        if (pageState.getState("front_page") == "ongoing_dialog") {
+          var ongoingDialog = this.storeChatList();
+          data.ongoingDialog = ongoingDialog;
+        }
+        break;
+      case "chat_page":
+        var toid = data.toid;
+        console.log(`toid: ${toid}`);
+        this.storeChatUnreadReset(toid);
+        var ongoingDialog = this.storeChatList();
+        var conversations = this.storeChatGet(toid);
+        data.ongoingDialog = ongoingDialog;
+        data.conversations = conversations;
+        break;
+      default:
+        break;
     }
-    /**
-     * 
-     */
     this.getUsers();
-    return store.dispatch({ type: "PAGE_CHANGE", page: page, data: data });
+    store.dispatch({ type: "PAGE_STATE_CHANGE", data: data });
   },
-  pageCheck: function (page) {
-    if (page == "login") return true;
-    var userid = cookie.get("userid");
-    var that = this;
-    if (!userid) {
-      that.pageChange("login");
-      return false;
-    } else {
-      var state = this.getState();
-      var nickname = cookie.get("nickname");
-      var avatar = cookie.get("avatar");
-      store.dispatch({ type: "SET_USER_INFO", userid: userid, nickname: nickname, avatar: avatar });
+  pageCheck: function (pageState=undefined) {
+    if (!pageState) {
+      pageState = this.getState().pageState;
+    }
+    if (pageState.getState("front_page") == "user" && (['login', 'register'].includes(pageState.getState("user")))) {
       return true;
     }
+    var userid = cookie.get('userid');
+    if (!userid) {
+      this.__pageLogin();
+      return false;
+    }
+    var nickname = cookie.get("nickname");
+    var avatar = cookie.get("avatar");
+    this.setUserInfo({ id: userid, nickname: nickname, avatar: avatar });
+    return true;
   },
   register: function (username, password) {
     var that = this;
@@ -167,6 +203,8 @@ const action = {
     /**
      * 
      */
+    // 不能自己发给自己
+    if (data.from == data.to)return;
     var state = this.getState();
     var userid = state.userid;
     var toid = data.to == userid ? data.from : data.to;
@@ -211,8 +249,7 @@ const action = {
         that.__socket.on("news", function (data) {
           that.sentenceReceived(data);
         });
-        that.__socket.on("users", function(data) {
-          console.log("update users");
+        that.__socket.on("users", function (data) {
           that.getUsers();
         })
       });
@@ -233,7 +270,7 @@ const action = {
     })
   },
   startChat: function (toid) {
-    this.curPageChange("chat", toid);
+    this.pagePush("chat_page", { toid: toid });
   },
   storeChatAdd(toid, data) {
     var datas = JSON.parse(localStorage.getItem("ongoingDialog"));
@@ -292,6 +329,26 @@ const action = {
       this.__unsubscribe();
       this.__unsubscribe = undefined;
     }
+  },
+  updateNickname: function(nickname) {
+    var fd = new FormData();
+    fd.append("userid", cookie.get('userid'));
+    fd.append("nickname", nickname);
+    fetch('/login/users/nickname', {
+      method: "POST",
+      body: fd
+    }).then((res) => {
+      if (res.ok) {
+        res.json().then((data)=> {
+          if (data.code == 0) {
+            this.getUserInfo();
+            this.pageBack();
+          } else {
+            alert(data.msg);
+          }
+        })
+      }
+    })
   },
   uploadAvatar: function (avatar) {
     var fd = new FormData();

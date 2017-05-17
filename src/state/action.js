@@ -43,38 +43,50 @@ const action = {
     return store.getState();
   },
   login: function (username, password) {
-    var that = this;
-    var fd = new FormData();
-    fd.append("username", username);
-    fd.append("password", password);
-    fetch("/login/login", {
-      method: "POST",
-      body: fd
-    }).then((res) => {
-      if (res.ok) {
-        res.json().then((data) => {
-          if (data.code === 0) {
-            var userinfo = data.data;
-            that.setUserInfo(userinfo);
-            // init socketio
-            this.socketConnect();
-            this.loginStateChange("info");
-          } else {
-            alert("登陆失败");
-          }
-        })
+    return new Promise((resolve, reject) => {
+      if (!username || !password) {
+        alert("用户名或密码不能为空");
+        reject();
       }
+      var that = this;
+      var fd = new FormData();
+      fd.append("username", username);
+      fd.append("password", password);
+      fetch("/login/login", {
+        method: "POST",
+        body: fd
+      }).then((res) => {
+        if (res.ok) {
+          res.json().then((data) => {
+            if (data.code === 0) {
+              var userinfo = data.data;
+              that.setUserInfo(userinfo);
+              resolve();
+              // init socketio
+              this.socketConnect();
+            } else {
+              alert("登陆失败");
+              reject();
+            }
+          }).catch(() => {
+            reject();
+          })
+        } else {
+          reject();
+        }
+      }).catch(() => {
+        reject();
+      })
     })
   },
   logout: function () {
-    cookie.remove("userid");
-    cookie.remove("nickname");
-    cookie.remove("avatar");
-    this.loginStateChange("login");
-    this.socketDisconnect();
-  },
-  loginStateChange: function (state) {
-    this.pageSetState("user", state);
+    return new Promise((resolve, reject) => {
+      cookie.remove("userid");
+      cookie.remove("nickname");
+      cookie.remove("avatar");
+      this.socketDisconnect();
+      resolve();
+    })
   },
   newInfoNotification: function (toid, data) {
     if (this.__clearNewInfoNotification) {
@@ -92,111 +104,42 @@ const action = {
       }, 2000);
     }
   },
-  pageAdd: function (page, weight, extraData = {}) {
-    var state = this.getState();
-    var pageState = state.pageState;
-    pageState.push(page, weight);
-    this.__pageChange(pageState, extraData);
-  },
-  pageBack: function() {
-    var state = this.getState();
-    var pageState = state.pageState;
-    pageState.back();
-    this.__pageChange(pageState, {});
-  },
-  pagePush: function (page, extraData) {
-    this.pageAdd(page, undefined, extraData);
-  },
-  pageReplace: function (page, extraData = {}) {
-    var state = this.getState();
-    var pageState = state.pageState;
-    pageState.replace(page);
-    this.__pageChange(pageState, extraData);
-  },
-  pageSetState: function (page, st) {
-    var state = this.getState();
-    var pageState = state.pageState;
-    pageState.setState(page, st);
-    this.__pageChange(pageState, {});
-  },
-  __pageLogin: function() {
-    var state = this.getState();
-    var pageState = state.pageState;
-    pageState.push("front_page");
-    pageState.setState("front_page", "user");
-    pageState.setState("user", "login");
-    store.dispatch({type: "PAGE_STATE_CHANGE", data: {pageState: pageState}});
-  },
-  __pageChange: function (pageState, extraData={}) {
-    if (!this.pageCheck(pageState)) {
-      return;
-    }
-    var data = extraData;
-    data.pageState = pageState;
-    switch (pageState.getPage()) {
-      case "front_page":
-        if (pageState.getState("front_page") == "ongoing_dialog") {
-          var ongoingDialog = this.storeChatList();
-          data.ongoingDialog = ongoingDialog;
-        }
-        break;
-      case "chat_page":
-        var toid = data.toid;
-        console.log(`toid: ${toid}`);
-        this.storeChatUnreadReset(toid);
-        var ongoingDialog = this.storeChatList();
-        var conversations = this.storeChatGet(toid);
-        data.ongoingDialog = ongoingDialog;
-        data.conversations = conversations;
-        break;
-      default:
-        break;
-    }
-    this.getUsers();
-    store.dispatch({ type: "PAGE_STATE_CHANGE", data: data });
-  },
-  pageCheck: function (pageState=undefined) {
-    if (!pageState) {
-      pageState = this.getState().pageState;
-    }
-    if (pageState.getState("front_page") == "user" && (['login', 'register'].includes(pageState.getState("user")))) {
-      return true;
-    }
-    var userid = cookie.get('userid');
-    if (!userid) {
-      this.__pageLogin();
-      return false;
-    }
-    var nickname = cookie.get("nickname");
-    var avatar = cookie.get("avatar");
-    this.setUserInfo({ id: userid, nickname: nickname, avatar: avatar });
-    return true;
-  },
   register: function (username, password) {
-    var that = this;
-    var fd = new FormData();
-    fd.append("username", username);
-    fd.append("password", password);
-    fetch('/login/register', {
-      method: "POST",
-      body: fd
-    }).then((res) => {
-      if (res.ok) {
-        res.json().then((data) => {
-          if (data.code === 0) {
-            alert("注册成功");
-            that.loginStateChange("login");
-          } else {
-            alert("注册失败");
-          }
-        })
+    return new Promise((resolve, reject) => {
+      if (!username || !password) {
+        alert("用户名或密码不能为空");
+        reject();
       }
+      var that = this;
+      var fd = new FormData();
+      fd.append("username", username);
+      fd.append("password", password);
+      fetch('/login/register', {
+        method: "POST",
+        body: fd
+      }).then((res) => {
+        if (res.ok) {
+          res.json().then((data) => {
+            if (data.code === 0) {
+              alert("注册成功");
+              resolve();
+            } else {
+              reject();
+            }
+          }).catch(() => {
+            reject();
+          })
+        } else {
+          reject();
+        }
+      }).catch(() => {
+        reject();
+      })
     })
   },
   sendSentence: function (sentence) {
-    var userid = cookie.get("userid");
     var state = this.getState();
-    var data = { from: userid, to: state.toid, content: sentence, datetime: moment().valueOf() };
+    var data = { from: state.userid, to: state.toid, content: sentence, datetime: moment().valueOf() };
     this.__socket.emit("info", data);
   },
   sentenceAdd: function (data) {
@@ -204,7 +147,7 @@ const action = {
      * 
      */
     // 不能自己发给自己
-    if (data.from == data.to)return;
+    if (data.from == data.to) return;
     var state = this.getState();
     var userid = state.userid;
     var toid = data.to == userid ? data.from : data.to;
@@ -243,7 +186,6 @@ const action = {
       if (!userid) return;
       that.__socket = new io("http://localhost:3003");
       that.__socket.on("connect", function () {
-        console.log("connected");
         window.socket = that.__socket;
         that.__socket.emit("init", { id: userid });
         that.__socket.on("news", function (data) {
@@ -270,7 +212,12 @@ const action = {
     })
   },
   startChat: function (toid) {
-    this.pagePush("chat_page", { toid: toid });
+    var data = {};
+    this.storeChatUnreadReset(toid);
+    var conversations = this.storeChatGet(toid);
+    data.conversations = conversations;
+    data.toid = toid;
+    store.dispatch({ type: "PAGE_STATE_CHANGE", data: data });
   },
   storeChatAdd(toid, data) {
     var datas = JSON.parse(localStorage.getItem("ongoingDialog"));
@@ -330,24 +277,33 @@ const action = {
       this.__unsubscribe = undefined;
     }
   },
-  updateNickname: function(nickname) {
-    var fd = new FormData();
-    fd.append("userid", cookie.get('userid'));
-    fd.append("nickname", nickname);
-    fetch('/login/users/nickname', {
-      method: "POST",
-      body: fd
-    }).then((res) => {
-      if (res.ok) {
-        res.json().then((data)=> {
-          if (data.code == 0) {
-            this.getUserInfo();
-            this.pageBack();
-          } else {
-            alert(data.msg);
-          }
-        })
-      }
+  updateNickname: function (nickname) {
+    return new Promise((resolve, reject) => {
+      var fd = new FormData();
+      fd.append("userid", cookie.get('userid'));
+      fd.append("nickname", nickname);
+      fetch('/login/users/nickname', {
+        method: "POST",
+        body: fd
+      }).then((res) => {
+        if (res.ok) {
+          res.json().then((data) => {
+            if (data.code == 0) {
+              this.getUserInfo();
+              resolve();
+            } else {
+              alert(data.msg);
+              reject();
+            }
+          }).catch(() => {
+            reject();
+          })
+        } else {
+          reject();
+        }
+      }).catch(() => {
+        reject();
+      })
     })
   },
   uploadAvatar: function (avatar) {
@@ -366,7 +322,11 @@ const action = {
         })
       }
     })
-  }
+  },
+  userCheck: function () {
+    var userid = cookie.get("userid");
+    return !!userid;
+  },
 }
 
 export default action;

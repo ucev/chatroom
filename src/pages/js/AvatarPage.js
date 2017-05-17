@@ -1,17 +1,25 @@
-import React, { Component } from 'react';
+import React from 'react';
+import BasePage from './BasePage';
+import {
+  BrowserRouter as Router,
+  Redirect,
+  Route
+} from 'react-router-dom';
 
 import '../css/AvatarPage.css';
 
 import MyAction from '../../state/action';
 
-class AvatarPage extends Component {
+class AvatarPage extends BasePage {
   constructor(props) {
     super(props);
+    this.state = MyAction.getState();
+    this.back = this.back.bind(this);
     this.chooseAvatar = this.chooseAvatar.bind(this);
     this.uploadAvatar = this.uploadAvatar.bind(this);
   }
   back() {
-    MyAction.pageBack();
+    this.props.history.goBack();
   }
   chooseAvatar() {
     this.avatarInput.click();
@@ -19,7 +27,11 @@ class AvatarPage extends Component {
   uploadAvatar(e) {
     MyAction.uploadAvatar(this.avatarInput.files[0]);
   }
-  render() { 
+  render() {
+    if (!MyAction.userCheck()) {
+      return <Redirect to = '/login' />;
+    }
+    var avatar = this.state.avatar;
     return (
       <div className="App avatar-page">
         <div className="App-header avatar-header">
@@ -27,7 +39,7 @@ class AvatarPage extends Component {
           <img className="avatar-choose-photo" src="/images/ic_photo_white_36dp_2x.png" onClick={this.chooseAvatar} />
         </div>
         <div className="App-body avatar-body">
-          <img className="avatar-page-img" src={MyAction.getAvatarPath(this.props.avatar)} />
+          <img className="avatar-page-img" src={MyAction.getAvatarPath(avatar)} />
           <input onChange={this.uploadAvatar} ref={(avatar) => { this.avatarInput = avatar; }} type="file" accept="image/*" style={{ display: "none" }} />
         </div>
       </div>

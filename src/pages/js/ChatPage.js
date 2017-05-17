@@ -1,5 +1,8 @@
-import React, { Component } from 'react';
-
+import React from 'react';
+import BasePage from './BasePage';
+import {
+  Redirect
+} from 'react-router-dom';
 import SentenceItem from '../../components/js/SentenceItem';
 import SentenceInput from '../../components/js/SentenceInput';
 
@@ -7,9 +10,11 @@ import MyAction from '../../state/action';
 
 import '../css/ChatPage.css';
 
-class ChatPage extends Component {
+class ChatPage extends BasePage {
   constructor(props) {
     super(props);
+    this.state = MyAction.getState();
+    this.back = this.back.bind(this);
     this.getUserInfo = this.getUserInfo.bind(this);
     this.chatTo = this.chatTo.bind(this);
   }
@@ -18,15 +23,17 @@ class ChatPage extends Component {
   }
 
   componentDidMount() {
+    super.componentDidMount();
+    MyAction.startChat(this.props.match.params.id);
     document.body.scrollTop = document.body.scrollHeight;
   }
 
   back() {
-    MyAction.pageBack();
+    this.props.history.goBack();
   }
 
   getUserInfo(id) {
-    var users = this.props.users;
+    var users = this.state.users;
     for (var user of users) {
       if (user.id == id) {
         return user;
@@ -36,18 +43,24 @@ class ChatPage extends Component {
   }
 
   chatTo() {
-    var newinfo = this.props.newinfo;
+    var newinfo = this.state.newinfo;
     MyAction.startChat(newinfo.from);
   }
 
   render() {
-    var userid = this.props.userid;
-    var chatItem = this.props.conversations;
+    if (!MyAction.userCheck()) {
+      return <Redirect to="/login"/>;
+    }
+    if (!this.props.match.params.id) {
+      return <Redirect to="/"/>
+    }
+    var userid = this.state.userid;
+    var chatItem = this.state.conversations;
     var sentences = chatItem.map((chat, index) => {
       var userinfo = this.getUserInfo(chat.from);
       return <SentenceItem key={index} ownerid={userid} fromid={chat.from} nickname={userinfo.name} avatar={MyAction.getAvatarPath(userinfo.avatar)} content={chat.content} />
     });
-    var newinfo = this.props.newinfo;
+    var newinfo = this.state.newinfo;
     return (
       <div className="App">
         <div className="App-header chat-page-header">

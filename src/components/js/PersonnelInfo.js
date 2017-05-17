@@ -1,4 +1,7 @@
 import React, { Component } from 'react';
+import {
+  Link
+} from 'react-router-dom';
 import MyAction from '../../state/action';
 
 import '../css/PersonnelInfo.css';
@@ -6,33 +9,27 @@ import '../css/PersonnelInfo.css';
 class PersonnelInfo extends Component {
   constructor(props) {
     super(props);
-    this.chooseAvatar = this.chooseAvatar.bind(this);
-    this.uploadAvatar = this.uploadAvatar.bind(this);
-  }
-  changeNickname() {
-    MyAction.pageAdd("nickname_page");
-  }
-  chooseAvatar() {
-    //this.avatarInput.click();
-    MyAction.pageAdd("avatar_page");
+    this.logout = this.logout.bind(this);
   }
   logout() {
-    MyAction.logout();
-  }
-  uploadAvatar(e) {
-    MyAction.uploadAvatar(this.avatarInput.files[0]);
+    MyAction.logout().then(() => {
+      this.props.history.replace('/');
+    })
   }
   render() {
-    return (
+    var state = MyAction.getState();
+    var avatar = state.avatar;
+    var nickname = state.nickname;
+    return ( 
       <div className="personnel-info-div">
-        <div className="personnel-info-item-div" onClick={this.chooseAvatar}>
+        <Link className="personnel-info-item-div" to={`/avatar`}>
           <label className="personnel-info-item-label">头像</label>
-          <img className="personnel-info-item-content" src={MyAction.getAvatarPath(this.props.avatar)} />
-        </div>
-        <div className="personnel-info-item-div" onClick={this.changeNickname}>
+          <img className="personnel-info-item-content" src={MyAction.getAvatarPath(avatar)} />
+        </Link>
+        <Link className="personnel-info-item-div" to={`/nickname`}>
           <label className="personnel-info-item-label">昵称</label>
-          <span className="personnel-info-item-content">{this.props.nickname}</span>
-        </div>
+          <span className="personnel-info-item-content">{nickname}</span>
+        </Link>
         <button className="logout-button" onClick={this.logout}>退出登录</button>
         <input onChange={this.uploadAvatar} ref={(avatar) => { this.avatarInput = avatar; }} type="file" accept="image/*" style={{display: "none"}}/>
       </div>

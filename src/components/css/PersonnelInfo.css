@@ -1,6 +1,6 @@
 .personnel-info-div {
   height: 1000%;
-  background-color: #EEEEEE;
+  background-color: #FFF;
 }
 
 .personnel-info-item-div {
@@ -9,6 +9,9 @@
   align-items: center;
   min-height: 50px;
   border-bottom: 1px solid #BDBDBD;
+  color: #212121;
+  text-decoration: none;
+  cursor: pointer;
 }
 
 .personnel-info-item-label {

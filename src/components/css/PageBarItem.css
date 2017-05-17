@@ -3,7 +3,12 @@
   height: 50px;
   padding: 5px;
   list-style-type: none;
+  text-decoration: none;
   cursor: pointer;
+}
+
+.page-bar-item a {
+  text-decoration: none;
 }
 
 .page-bar-item img {
@@ -18,4 +23,5 @@
   height: 20px;
   line-height: 20px;
   font-size: 14px;
+  color: #424242;
 }

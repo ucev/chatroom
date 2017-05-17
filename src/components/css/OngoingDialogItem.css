@@ -1,5 +1,4 @@
 .ongoing-dialog-item {
-  position: relative;
   width: 100%;
   height: 60px;
   padding: 0;
@@ -10,18 +9,25 @@
   cursor: pointer;
 }
 
+.ongoing-dialog-item-a {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
 .ongoing-dialog-item:last-of-type {
   border-bottom: 1px solid #BDBDBD;
 }
 
-.ongoing-dialog-item > * {
+.ongoing-dialog-item-a > * {
   display: inline-block;
   margin: 0;
   padding: 0;
   overflow: hidden;
 }
 
-.ongoing-dialog-item > .avatar {
+.ongoing-dialog-item-a > .avatar {
   position: absolute;
   top: 10px;
   left: 10px;

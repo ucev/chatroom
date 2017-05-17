@@ -1,11 +1,10 @@
-import PageManager from './PageManager';
-var pm = new PageManager();
-pm.setState("front_page", "ongoing_dialog");
-pm.setState("user", "info");
-pm.push("front_page", 1);
-const defaultState = {
+const defaultState = { 
+  //
+  userid: -1,
+  nickname: '',
+  avatar: '',
+  //
   counter: 0,
-  pageState: pm,
   // users who you can chat with
   users: [],
   // user who you are chatting with
@@ -15,16 +14,13 @@ const defaultState = {
   ongoingDialog: [],
   // new info notification
   newinfo: {}
-} 
+}
 const reducer = (state = defaultState, action) => {
   switch(action.type) {
     case "GET_USERS":
       return Object.assign({}, state, {users: action.users});
     case "NEW_INFO_NOTIFICATION":
       return Object.assign({}, state, {newinfo: {from: action.from, info: action.info}});
-    case "PAGE_CHANGE":
-      var newState = Object.assign({}, {page: action.page}, action.data);
-      return Object.assign({}, state, newState);
     case "PAGE_STATE_CHANGE":
       return Object.assign({}, state, action.data);
     case "SENTENCE_RECEIVED":

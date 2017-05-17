@@ -1,20 +1,23 @@
-import React, { Component } from 'react';
+import React from 'react';
+import BasePage from './BasePage';
 
 import '../css/NicknamePage.css';
 
 import MyAction from '../../state/action';
 
-class NicknamePage extends Component {
+class NicknamePage extends BasePage {
   constructor(props) {
     super(props);
+    this.back = this.back.bind(this);
     this.onNicknameChange = this.onNicknameChange.bind(this);
     this.updateNickname = this.updateNickname.bind(this);
   }
   componentDidMount() {
-    this.nicknameInput.value = this.props.nickname;
+    super.componentDidMount();
+    this.nicknameInput.value = this.state.nickname;
   }
   back() {
-    MyAction.pageBack();
+    this.props.history.goBack();
   }
   onNicknameChange(e) {
     this.setState({
@@ -22,9 +25,14 @@ class NicknamePage extends Component {
     })
   }
   updateNickname() {
-    MyAction.updateNickname(this.nicknameInput.value);
+    MyAction.updateNickname(this.nicknameInput.value).then(() => {
+      this.back();
+    })
   }
   render() {
+    if (!MyAction.userCheck()) {
+      return <Redirect to="/login" />;
+    }
     return (
       <div className="App nickname-page">
         <div className="App-header nickname-header">

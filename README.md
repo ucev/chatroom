@@ -15,3 +15,6 @@ Add online/offline state tommorrow, together with some small modifications.
 
 ## Update on 2017/4/28
 In this demo, I have learnt how to use **socket.io** and how to create **single page web application** with `React`. It meets my current needs. So just stop here, and I will find something else to learn.
+
+## Update on 2017/5/17
+Integrate with `react-router`. After this, `hot-module-reload` can't work as expected, for `react-router`'s routing mechanism conflicts with browsers' refreshing mechanism. Besides this, the way to inject *state* is not perfect(/src/pages/js/BasePage.js).

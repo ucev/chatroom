@@ -16,7 +16,7 @@ class OngoingDialog extends Component {
     return {};
   }
   getChatTime(tm) {
-    if (!tm) {return ""};
+    if (!tm) { return "" };
     var now = moment();
     var last = moment(tm);
     if (now.year() == last.year() && now.month() == last.month() && now.dayOfYear() == last.dayOfYear()) {
@@ -26,8 +26,10 @@ class OngoingDialog extends Component {
     }
   }
   render() {
-    var users = this.props.users;
-    var dialogs = this.props.dialogs.map((dialog) => {
+    var state = MyAction.getState();
+    var users = state.users;
+    var ongoingDialog = MyAction.storeChatList();
+    var dialogs = ongoingDialog.map((dialog) => {
       var toid = Number(dialog.id);
       var userinfo = this.getUserInfo(users, toid);
       var lastDialog = dialog.dialog;

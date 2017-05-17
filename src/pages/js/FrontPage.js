@@ -1,33 +1,59 @@
-import React, { Component } from 'react';
+import React from 'react';
+import BasePage from './BasePage';
+import {
+  BrowserRouter as Router,
+  Link,
+  Redirect,
+  Route,
+  Switch
+} from 'react-router-dom';
+
 import '../../App.css';
 
-import OngoingDialog from '../../components/js/OngoingDialog';
 import Contacts from '../../components/js/Contacts';
-import Login from '../../components/js/Login';
-import PersonnelInfo from '../../components/js/PersonnelInfo';
+import OngoingDialog from '../../components/js/OngoingDialog';
 import PageChooser from '../../components/js/PageChooser';
-import User from '../../components/js/User';
+import PersonnelInfo from '../../components/js/PersonnelInfo';
 
 import MyAction from '../../state/action';
 
-class App extends Component {
-  constructor(props) {
-    super(props);
+class FrontPage extends BasePage {
+  componentDidMount() {
+    super.componentDidMount();
+    MyAction.getUserInfo();
   }
   render() {
-    var state = this.props.state;
+    if (!MyAction.userCheck()) {
+      return <Redirect to="/login"/>;
+    }
+    var state = MyAction.getState();
+    var match = this.props.match;
     var pageItems = [
-      { icon: '/images/ic_chat_bubble_outline_black_36dp_1x.png', label: '聊天', page: 'ongoing_dialog' },
-      { icon: '/images/ic_person_outline_black_36dp_1x.png', label: '联系人', page: 'contacts' },
-      { icon: '/images/ic_cloud_outline_black_36dp_1x.png', label: '个人', page: 'user' }
+      { icon: '/images/ic_chat_bubble_outline_black_36dp_1x.png', label: '聊天', page: 'chat', url: `${match.url}/chat` },
+      { icon: '/images/ic_person_outline_black_36dp_1x.png', label: '联系人', page: 'contacts', url: `${match.url}/contacts` },
+      { icon: '/images/ic_cloud_outline_black_36dp_1x.png', label: '个人', page: 'user', url: `${match.url}/user` }
     ];
-    var pageState = state.pageState;
-    var currpage = pageState.getState("front_page");
     return (
       <div className="App">
         <div className="App-header">
           <h2>Chatroom DEMO</h2>
         </div>
+        <div className="App-body">
+          <Switch>
+            <Route path={`${match.url}/contacts`} component={Contacts} />
+            <Route path={`${match.url}/user`} component={PersonnelInfo} />
+            <Route path={`${match.url}/chat`} component={OngoingDialog}/>
+            <Redirect to={`${match.url}/chat`}/>
+          </Switch>
+        </div>
+        <div className="App-foot">
+          <PageChooser pages={pageItems} />
+        </div>
+      </div>
+    );
+    /*
+    return (
+      <div className="App">
         <div className="App-body">
           <div key="chat" className="app-page app-page-chat" style={{ display: currpage === "ongoing_dialog" ? "block" : "none" }}>
             <OngoingDialog users={state.users} dialogs={state.ongoingDialog} />
@@ -39,12 +65,10 @@ class App extends Component {
             <User tag={pageState.getState("user")} avatar={state.avatar} nickname={state.nickname} />
           </div>
         </div>
-        <div className="App-foot">
-          <PageChooser pages={pageItems} />
-        </div>
       </div>
     );
+    */
   }
 }
 
-export default App;
+export default FrontPage;

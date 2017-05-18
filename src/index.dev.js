@@ -13,5 +13,12 @@ const render = (Component) => {
     document.getElementById('root')
   )
 };
-
+ 
 render(App);
+if (module.hot) {
+  module.hot.accept('./App', () => {
+    render(
+        <App />
+    )
+  })
+}

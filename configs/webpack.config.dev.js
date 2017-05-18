@@ -20,7 +20,8 @@ module.exports = function (env) {
       contentBase: path.resolve(__dirname, '../public'),
       hot: true,
       port: port,
-      publicPath: '/'
+      publicPath: '/',
+      historyApiFallback: true
     },
     module: {
       rules: [

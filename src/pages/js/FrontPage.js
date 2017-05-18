@@ -1,8 +1,6 @@
 import React from 'react';
 import BasePage from './BasePage';
 import {
-  BrowserRouter as Router,
-  Link,
   Redirect,
   Route,
   Switch
@@ -44,7 +42,7 @@ class FrontPage extends BasePage {
             <Route path={`${match.url}/user`} component={PersonnelInfo} />
             <Route path={`${match.url}/chat`} component={OngoingDialog}/>
             <Redirect to={`${match.url}/chat`}/>
-          </Switch>
+          </Switch> 
         </div>
         <div className="App-foot">
           <PageChooser pages={pageItems} />

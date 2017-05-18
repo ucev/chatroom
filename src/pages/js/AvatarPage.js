@@ -1,9 +1,7 @@
 import React from 'react';
 import BasePage from './BasePage';
 import {
-  BrowserRouter as Router,
-  Redirect,
-  Route
+  Redirect
 } from 'react-router-dom';
 
 import '../css/AvatarPage.css';
@@ -17,6 +15,10 @@ class AvatarPage extends BasePage {
     this.back = this.back.bind(this);
     this.chooseAvatar = this.chooseAvatar.bind(this);
     this.uploadAvatar = this.uploadAvatar.bind(this);
+  }
+  componentDidMount() {
+    super.componentDidMount();
+    MyAction.getUserInfo();
   }
   back() {
     this.props.history.goBack();

@@ -15,7 +15,7 @@ class PageBarItem extends Component {
     var page = this.props.page;
     return (
       <li className="page-bar-item">
-        <Link to={`${page.url}`}>
+        <Link to={`${page.url}`} replace>
           <img className="page-bar-item-icon" src={page.icon} alt={page.label} />
           <span className="page-bar-item-label">{page.label}</span>
         </Link>

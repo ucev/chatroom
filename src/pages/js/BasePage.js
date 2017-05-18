@@ -13,6 +13,10 @@ class BasePage extends Component {
   }
   componentDidMount() {
     MyAction.subscribe(this.__update);
+    /** 
+     * configs for HMR  
+     */
+    localStorage.setItem("chatroom_path", JSON.stringify(this.props.history));
   }
   componentWillUnmount() {
     MyAction.unsubscribe();

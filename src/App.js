@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import {
-  BrowserRouter as Router,
+  //BrowserRouter as Router,
+  MemoryRouter as Router,
   Redirect,
   Route,
   Switch
@@ -18,12 +19,15 @@ import MyAction from './state/action';
 
 class App extends Component {
   constructor(props) {
-    super(props);
+    super(props); 
   }
   render() {
-    MyAction.userCheck();
+    var history = JSON.parse(localStorage.getItem("chatroom_path"));
+    if (MyAction.userCheck()) {
+      MyAction.getUserInfo();
+    }
     return (
-      <Router>
+      <Router initialEntries={history.entries} initialIndex={history.index}>
         <Switch>
           <Route path="/chat/:id" component={ChatPage} />
           <Route path="/avatar" component={AvatarPage} />

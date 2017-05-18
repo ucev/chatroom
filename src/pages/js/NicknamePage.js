@@ -14,7 +14,12 @@ class NicknamePage extends BasePage {
   }
   componentDidMount() {
     super.componentDidMount();
-    this.nicknameInput.value = this.state.nickname;
+    this.nicknameInput.value = this.state.nickname; 
+  }
+  componentWillUpdate(nextProps, nextState) {
+    if (nextState.nickname != this.state.nickname) {
+      this.nicknameInput.value = nextState.nickname;
+    }
   }
   back() {
     this.props.history.goBack();

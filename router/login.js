@@ -47,8 +47,8 @@ router.post('/users/avatar', (req, res, next) => {
   var form = new multiparty.Form();
   form.parse(req, (err, fields, files) => {
     var userid = fields.userid;
-    var tempfile = files.avatar[0].path;
-    _users.updateAvatar(userid, tempfile).then(() => {
+    var avatar = fields.avatar[0];
+    _users.updateAvatar(userid, avatar).then(() => {
       res.json({code: 0, msg: '更新成功'});
     }).catch(() => {
       res.json({code: 1, msg: '更新失败'});

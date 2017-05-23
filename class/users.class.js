@@ -84,13 +84,16 @@ class Users {
     }).catch(() => { });
   }
 
-  updateAvatar(userid, tempfile) {
-    var fileext = path.extname(tempfile);
+  updateAvatar(userid, imgUrl) {
+    var regExp = /^data:.+\/(.+);base64,(.*)$/;
+    var matches = imgUrl.match(regExp);
+    var fileext = matches[1];
+    var data = new Buffer(matches[2], 'base64');
     var newname = md5(`${userid}:${Date.now()}`);
-    newname = newname + fileext;
+    newname = `${newname}.${fileext}`;
     var newpath = path.join(__dirname, '../public/images/avatar', newname);
     return new Promise((resolve, reject) => {
-      fs.rename(tempfile, newpath, (err) => {
+      fs.writeFile(newpath, data, (err) => {
         if (err) {
           reject();
         }

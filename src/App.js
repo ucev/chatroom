@@ -10,6 +10,7 @@ import {
 import './App.css';
 
 import AvatarPage from './pages/js/AvatarPage';
+import SetAvatarPage from './pages/js/SetAvatarPage';
 import ChatPage from './pages/js/ChatPage';
 import FrontPage from './pages/js/FrontPage';
 import LoginPage from './pages/js/LoginPage';
@@ -30,6 +31,7 @@ class App extends Component {
       <Router initialEntries={history.entries} initialIndex={history.index}>
         <Switch>
           <Route path="/chat/:id" component={ChatPage} />
+          <Route path="/avatar/set" component={SetAvatarPage} />
           <Route path="/avatar" component={AvatarPage} />
           <Route path="/nickname" component={NicknamePage} />
           <Route path="/login" component={LoginPage} />

@@ -16,16 +16,21 @@
   overflow: hidden;
 }
 
+#avatar-page-img-outer-div {
+  width: 100%;
+}
+
 .avatar-page-img {
   display: block;
   width: 100%;
 }
 
-.avatar-choose-photo {
+
+.avatar-action-button {
   position: absolute;
-  right: 10px;
   height: 30px;
   width: 30px;
+  right: 10px;
   top: 50%;
   transform: translateY(-50%);
   cursor: pointer;

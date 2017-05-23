@@ -307,20 +307,29 @@ const action = {
     })
   },
   uploadAvatar: function (avatar) {
-    var fd = new FormData();
-    fd.append("avatar", avatar);
-    fd.append("userid", cookie.get("userid"));
-    fetch("/login/users/avatar", {
-      method: "POST",
-      body: fd
-    }).then((res) => {
-      if (res.ok) {
-        res.json().then((data) => {
-          if (data.code == 0) {
-            this.getUserInfo();
-          }
-        })
-      }
+    return new Promise((resolve, reject) => {
+      var fd = new FormData();
+      fd.append("avatar", avatar);
+      fd.append("userid", cookie.get("userid"));
+      fetch("/login/users/avatar", {
+        method: "POST",
+        body: fd
+      }).then((res) => {
+        if (res.ok) {
+          res.json().then((data) => {
+            if (data.code == 0) {
+              resolve();
+            }
+            reject();
+          }).catch(() => {
+            reject();
+          })
+        } else {
+          reject();
+        }
+      }).catch(() => {
+        reject();
+      })
     })
   },
   userCheck: function () {

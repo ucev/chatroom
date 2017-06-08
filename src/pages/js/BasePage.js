@@ -16,8 +16,8 @@ class BasePage extends Component {
     /** 
      * configs for HMR  
      */
-    localStorage.setItem("chatroom_path", JSON.stringify(this.props.history));
-  }
+    window.history.replaceState({"chatroom_path": JSON.stringify(this.props.history)}, '');
+  } 
   componentWillUnmount() {
     MyAction.unsubscribe();
   }

@@ -88,7 +88,7 @@ class Users {
     var regExp = /^data:.+\/(.+);base64,(.*)$/;
     var matches = imgUrl.match(regExp);
     var fileext = matches[1];
-    var data = new Buffer(matches[2], 'base64');
+    var data = Buffer.from(matches[2], 'base64');
     var newname = md5(`${userid}:${Date.now()}`);
     newname = `${newname}.${fileext}`;
     var newpath = path.join(__dirname, '../public/images/avatar', newname);

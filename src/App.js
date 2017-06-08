@@ -23,9 +23,9 @@ class App extends Component {
     super(props); 
   }
   render() {
-    var history = JSON.parse(localStorage.getItem("chatroom_path"));
+    var history = window.history.state && window.history.state.chatroom_path ? JSON.parse(window.history.state.chatroom_path) : {};
     if (MyAction.userCheck()) {
-      MyAction.getUserInfo();
+      MyAction.getUserInfo(); 
     }
     return (
       <Router initialEntries={history.entries} initialIndex={history.index}>

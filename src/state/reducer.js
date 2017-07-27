@@ -5,6 +5,8 @@ const defaultState = {
   avatar: '',
   //
   counter: 0,
+  // whether is chatting
+  ischat: false,
   // users who you can chat with
   users: [],
   // user who you are chatting with
@@ -17,12 +19,15 @@ const defaultState = {
 }
 const reducer = (state = defaultState, action) => {
   switch(action.type) {
+    case "CHAT_END":
+      return Object.assign({}, state, {ischat: false})
+    case "CHAT_START":
+      action.data.ischat = true;
+      return Object.assign({}, state, action.data);
     case "GET_USERS":
       return Object.assign({}, state, {users: action.users});
     case "NEW_INFO_NOTIFICATION":
       return Object.assign({}, state, {newinfo: {from: action.from, info: action.info}});
-    case "PAGE_STATE_CHANGE":
-      return Object.assign({}, state, action.data);
     case "SENTENCE_RECEIVED":
       var conversations = Array.from(state.conversations);
       conversations.push(action.data);

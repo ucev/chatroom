@@ -6,6 +6,9 @@ const action = {
   __unsubscribe: undefined,
   __socket: undefined,
   __inited: false,
+  chatEnd: () => {
+    store.dispatch({type: "CHAT_END"});
+  },
   getAvatarPath: (avatar) => {
     return `/images/avatar/${avatar}`;
   },
@@ -24,16 +27,19 @@ const action = {
     })
   },
   getUsers: () => {
-    var userid = cookie.get("userid");
-    fetch(`/login/users?id=${userid}`).then((res) => {
-      if (res.ok) {
-        res.json().then((data) => {
-          if (data.code == 0) {
-            store.dispatch({ type: "GET_USERS", users: data.data });
-          }
-        })
-      }
-    })
+    var f = (dispatch) => {
+      var userid = cookie.get("userid");
+      fetch(`/login/users?id=${userid}`).then((res) => {
+        if (res.ok) {
+          res.json().then((data) => {
+            if (data.code == 0) {
+              dispatch({ type: "GET_USERS", users: data.data });
+            }
+          })
+        }
+      })
+    }
+    store.dispatch(f);
   },
   getState: function () {
     if (!this.__inited) {
@@ -92,17 +98,20 @@ const action = {
     if (this.__clearNewInfoNotification) {
       clearTimeout(this.__clearNewInfoNotification);
     }
-    var state = store.getState();
-    if (state.curpage == 'chat' && state.toid != toid) {
-      store.dispatch({ type: "NEW_INFO_NOTIFICATION", from: toid, info: data.content });
-      var notEle = document.createElement("audio");
-      notEle.src = '/notification.mp3';
-      notEle.play();
-      this.__clearNewInfoNotification = setTimeout(() => {
-        store.dispatch({ type: "NEW_INFO_NOTIFICATION", from: -1, info: "" });
-        this.__clearNewInfoNotification = undefined;
-      }, 2000);
+    var f = (dispatch) => {
+      var state = store.getState();
+      if (state.curpage == 'chat' && state.toid != toid) {
+        dispatch({ type: "NEW_INFO_NOTIFICATION", from: toid, info: data.content });
+        var notEle = document.createElement("audio");
+        notEle.src = '/notification.mp3';
+        notEle.play();
+        this.__clearNewInfoNotification = setTimeout(() => {
+          dispatch({ type: "NEW_INFO_NOTIFICATION", from: -1, info: "" });
+          this.__clearNewInfoNotification = undefined;
+        }, 2000);
+      }
     }
+    store.dispatch(f);
   },
   register: function (username, password) {
     return new Promise((resolve, reject) => {
@@ -217,7 +226,7 @@ const action = {
     var conversations = this.storeChatGet(toid);
     data.conversations = conversations;
     data.toid = toid;
-    store.dispatch({ type: "PAGE_STATE_CHANGE", data: data });
+    store.dispatch({ type: "CHAT_START", data: data });
   },
   storeChatAdd(toid, data) {
     var datas = JSON.parse(localStorage.getItem("ongoingDialog"));
@@ -230,7 +239,7 @@ const action = {
     existsData.data.push(data);
     existsData.data.sort((a, b) => (a.datetime - b.datetime));
     var state = store.getState();
-    if (state.curpage == 'chat' && state.toid == toid) {
+    if (state.ischat && state.toid == toid) {
       existsData.unread = 0;
     } else {
       existsData.unread += 1;

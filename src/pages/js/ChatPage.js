@@ -28,6 +28,11 @@ class ChatPage extends BasePage {
     document.body.scrollTop = document.body.scrollHeight;
   }
 
+  componentWillUnmount() {
+    MyAction.chatEnd();
+    super.componentWillUnmount();
+  }
+
   back() {
     this.props.history.goBack();
   }
